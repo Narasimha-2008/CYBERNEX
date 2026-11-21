@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CYBERNEX — Log Analysis</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">C</div><div><b>CYBERNEX</b><span>AI-ASSISTED SOC PLATFORM</span></div></div>
+    <nav id="nav">
+      <button data-page="dashboard">◈ Dashboard</button>
+      <button data-page="incidents">⚠ Incidents <em id="incidentBadge">0</em></button>
+      <button data-page="investigation">⌁ Investigation</button>
+      <button data-page="simulator">◉ Attack Simulation</button>
+      <button data-page="logs" class="active">▤ Log Analysis <em>LIVE</em></button>
+      <button data-page="history">◷ Upload History</button>
+    </nav>
+    <div class="sidebar-foot"><span class="dot"></span> Detection engine online<br><small>Local processing • no external AI</small></div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div><div class="eyebrow">CYBERNEX / LOG ANALYSIS</div><h1>Upload & Analyze Security Logs</h1></div>
+      <div class="top-actions"><span class="privacy">LOCAL ONLY</span><button id="clearData" class="ghost danger">Remove uploaded data</button></div>
+    </header>
+
+    <section id="page-logs" class="page active">
+      <div class="hero-card website-hero">
+        <div><div class="pill">CYBERNEX SECURITY OPERATIONS</div><h2>Upload real security logs. Detect. Correlate. Investigate.</h2>
+        <p>Drop your CSV security logs below and CYBERNEX will process the actual records in your browser. No fake incident counts, no hardcoded upload results.</p><div class="hero-buttons"><button class="primary" onclick="document.getElementById('fileInput').click()">＋ Add CSV Logs</button><button class="ghost" onclick="page('simulator')">Try Attack Simulation</button></div></div>
+        <div class="hero-flow"><span>UPLOAD</span><i>→</i><span>NORMALIZE</span><i>→</i><span>DETECT</span><i>→</i><span>CORRELATE</span><i>→</i><span>RISK</span></div>
+      </div>
+
+      <div class="trust-strip">
+  <div><b>01</b><span>Upload</span><small>CSV files from your SOC</small></div>
+  <div><b>02</b><span>Validate</span><small>Real columns and records</small></div>
+  <div><b>03</b><span>Detect</span><small>Rules on actual events</small></div>
+  <div><b>04</b><span>Correlate</span><small>30-minute attack stories</small></div>
+  <div><b>05</b><span>Investigate</span><small>Evidence + recommendations</small></div>
+</div>
+
+<div class="grid two">
+        <div class="card">
+          <div class="card-head"><div><h3>Log files</h3><p>Supported: .csv • multiple files • max 10 MB/file</p></div><button id="browseBtn" class="primary">Browse files</button></div>
+          <input id="fileInput" type="file" accept=".csv,text/csv" multiple hidden>
+          <div id="dropzone" class="dropzone"><div class="upload-icon">⇧</div><h3>Drop CSV files here</h3><p>or click Browse files</p><small>Recommended names: login.csv, network.csv, file_access.csv, admin.csv</small></div>
+          <div id="fileList" class="file-list"></div>
+          <div class="row end"><button id="clearFiles" class="ghost">Clear all</button><button id="analyzeBtn" class="primary" disabled>Analyze uploaded logs</button></div>
+          <div id="progressWrap" class="progress-wrap hidden"><div class="progress-label"><span id="progressText">Processing…</span><span id="progressPct">0%</span></div><div class="progress"><span id="progressBar"></span></div></div>
+          <div id="uploadErrors"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h3>Expected log categories</h3><p>Category is inferred from filename and columns.</p></div></div>
+          <div class="category"><b>LOGIN</b><span>timestamp, username, source_ip, device_id, status/action</span></div>
+          <div class="category"><b>NETWORK</b><span>timestamp, username, source_ip, destination_ip, bytes_sent</span></div>
+          <div class="category"><b>FILE ACCESS</b><span>timestamp, username, device_id, file_name, action</span></div>
+          <div class="category"><b>ADMIN</b><span>timestamp, username, device_id, action, privilege_level</span></div>
+          <div class="notice">Optional fields are allowed. If your column names differ, CYBERNEX will show a mapping step before analysis.</div>
+        </div>
+      </div>
+
+      <div id="mappingCard" class="card hidden">
+        <div class="card-head"><div><h3>Column mapping</h3><p>Map only fields needed by the rules that apply to your data. Unavailable optional fields can remain unmapped.</p></div><button id="applyMapping" class="primary">Apply mapping & validate</button></div>
+        <div id="mappingBody"></div>
+      </div>
+
+      <div id="previewCard" class="card hidden">
+        <div class="card-head"><div><h3>Validated data preview</h3><p id="previewMeta"></p></div><button id="runAnalysis" class="primary">Run detection engine</button></div>
+        <div id="validationSummary"></div>
+        <div class="table-wrap"><table id="previewTable"></table></div>
+      </div>
+
+      <div id="resultsCard" class="card hidden">
+        <div class="card-head"><div><div class="pill">ANALYSIS COMPLETE</div><h3>Analysis results</h3><p id="resultMeta"></p></div><button id="viewIncidents" class="ghost">View incidents</button></div>
+        <div id="metricGrid" class="metrics"></div>
+        <div class="result-grid">
+          <div><h4>Severity distribution</h4><div id="severityBars"></div></div>
+          <div><h4>Detection summary</h4><div id="detectionSummary"></div></div>
+        </div>
+        <div><h4>Chronological attack timeline</h4><div id="timeline" class="timeline"></div></div>
+      </div>
+    </section>
+
+    <section id="page-dashboard" class="page"><div id="dashboardContent"></div></section>
+    <section id="page-incidents" class="page"><div id="incidentsContent"></div></section>
+    <section id="page-investigation" class="page"><div id="investigationContent"></div></section>
+    <section id="page-simulator" class="page"><div id="simulatorContent"></div></section>
+    <section id="page-history" class="page"><div id="historyContent"></div></section>
+  </main>
+</div>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

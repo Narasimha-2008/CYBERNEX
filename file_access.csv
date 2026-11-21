@@ -1,0 +1,4 @@
+timestamp,username,device_id,file_name,action,file_type,sensitivity
+2026-11-21 22:20:00,alice,device-new,confidential-001.pdf,read,pdf,high
+2026-11-21 22:20:01,alice,device-new,confidential-002.pdf,read,pdf,high
+2026-11-21 22:20:02,alice,device-new,confidential-003.pdf,read,pdf,high

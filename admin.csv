@@ -1,0 +1,2 @@
+timestamp,username,device_id,action,target_resource,privilege_level
+2026-11-21 22:25:00,alice,device-new,privileged restricted access,admin-console,normal user
